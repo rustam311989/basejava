@@ -61,7 +61,6 @@ public class ArrayStorage {
         }
         System.out.println("Resume " + uuid + " not found");
         return null;
-
     }
 
     public void delete(String uuid) {
