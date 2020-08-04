@@ -11,25 +11,13 @@ public class ArrayStorage {
     private Resume[] storage = new Resume[10_000];
     private int size = 0;
 
-    private int resumeSearch(String uuid) {
-        // Ищет резюме c uuid в хранилище и возвращает его индекс. Если резюме не найдено, возвращает -1
-        int index = -1;
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     public void update(Resume resume) {
-        int index = resumeSearch(resume.getUuid());
+        int index = searchIndex(resume.getUuid());
         if (index != -1) {
             storage[index] = resume;
             System.out.println("Resume " + resume + " updated successfully");
@@ -39,7 +27,7 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        int index = resumeSearch(resume.getUuid());
+        int index = searchIndex(resume.getUuid());
         if (index == -1) {
             if (size < storage.length) {
                 storage[size] = resume;
@@ -55,20 +43,18 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int indexGetResume = resumeSearch(uuid);
-        if (indexGetResume != -1) {
-            return storage[indexGetResume];
+        int index = searchIndex(uuid);
+        if (index != -1) {
+            return storage[index];
         }
         System.out.println("Resume " + uuid + " not found");
         return null;
     }
 
     public void delete(String uuid) {
-        int indexDelResume = resumeSearch(uuid);
-        if (indexDelResume != -1) {
-            for (int i = indexDelResume; i < size; i++) {
-                storage[i] = storage[i + 1];
-            }
+        int index = searchIndex(uuid);
+        if (index != -1) {
+            if (size - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - index);
             size--;
             System.out.println("Resume " + uuid + " deleted successfully");
         } else {
@@ -79,11 +65,24 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
+
     public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
         return size;
+    }
+
+    private int searchIndex(String uuid) {
+        // Ищет резюме c uuid в хранилище и возвращает его индекс. Если резюме не найдено, возвращает -1
+        int index = -1;
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 }
