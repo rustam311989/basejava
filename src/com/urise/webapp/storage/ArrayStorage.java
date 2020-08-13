@@ -7,7 +7,6 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage{
     @Override
-    //Шаблонный метод.Ищет резюме c uuid в хранилище и возвращает его индекс. Если резюме не найдено, возвращает -1
     protected int searchIndex(String uuid) {
         int index = -1;
         for (int i = 0; i < size; i++) {
@@ -20,7 +19,6 @@ public class ArrayStorage extends AbstractArrayStorage{
     }
 
     @Override
-    //Шаблонный метод. Сохраняет резюме в массиве.
     protected void doSave(Resume resume) {
         storage[size] = resume;
     }

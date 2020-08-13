@@ -16,6 +16,7 @@ public abstract class AbstractArrayStorage implements Storage{
     }
 
     @Override
+    //шаблонный метод
     public void update(Resume resume) {
         int index = searchIndex(resume.getUuid());
         if (index >= 0) {
@@ -27,6 +28,7 @@ public abstract class AbstractArrayStorage implements Storage{
     }
 
     @Override
+    //шаблонный метод
     public void save(Resume resume) {
         int index = searchIndex(resume.getUuid());
         if (index < 0) {
@@ -41,10 +43,10 @@ public abstract class AbstractArrayStorage implements Storage{
             System.out.println("This resume already exists");
         }
     }
-    //Шаблонный метод. Сохраняет резюме в массиве.
     protected abstract void doSave(Resume resume);
 
     @Override
+    //шаблонный метод
     public Resume get(String uuid) {
         int index = searchIndex(uuid);
         if (index >= 0) {
@@ -55,10 +57,13 @@ public abstract class AbstractArrayStorage implements Storage{
     }
 
     @Override
+    //шаблонный метод
     public void delete(String uuid) {
         int index = searchIndex(uuid);
         if (index >= 0) {
-            if (size - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - index);
+            if (size - index >= 0) {
+                System.arraycopy(storage, index + 1, storage, index, size - index);
+            }
             size--;
             System.out.println("Resume " + uuid + " deleted successfully");
         } else {
@@ -80,6 +85,5 @@ public abstract class AbstractArrayStorage implements Storage{
         return size;
     }
 
-    // Шаблонный метод. Ищет резюме c uuid в хранилище и возвращает его индекс. Если резюме не найдено, возвращает -1
     protected abstract int searchIndex(String uuid);
 }
