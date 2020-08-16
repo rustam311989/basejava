@@ -4,7 +4,7 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage{
+public abstract class AbstractArrayStorage implements Storage {
     private static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -40,9 +40,10 @@ public abstract class AbstractArrayStorage implements Storage{
                 System.out.println("It is not possible to keep the memory full");
             }
         } else {
-            System.out.println("This resume already exists");
+            System.out.println("Resume " + resume + " already exists");
         }
     }
+
     protected abstract void doSave(Resume resume);
 
     @Override
