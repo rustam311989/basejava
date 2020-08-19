@@ -5,7 +5,7 @@ import com.urise.webapp.model.Resume;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage extends AbstractArrayStorage{
+public class ArrayStorage extends AbstractArrayStorage {
     @Override
     protected int searchIndex(String uuid) {
         int index = -1;
@@ -19,7 +19,12 @@ public class ArrayStorage extends AbstractArrayStorage{
     }
 
     @Override
-    protected void doSave(Resume resume) {
+    protected void doSave(int index, Resume resume) {
         storage[size] = resume;
+    }
+
+    @Override
+    protected void shift(int index) {
+        storage[index] = storage[size - 1];
     }
 }

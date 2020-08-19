@@ -4,23 +4,23 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage{
+public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected int searchIndex(String uuid) {
         Resume r = new Resume();
         r.setUuid(uuid);
-        return Arrays.binarySearch(getAll(),r);
+        return Arrays.binarySearch(getAll(), r);
     }
 
     @Override
-    protected void doSave(Resume resume) {
-        for (int i = 0; i < size; i++) {
-            if (resume.compareTo(storage[i]) < 0) {
-                System.arraycopy(storage,i,storage,i+1,size-i);
-                storage[i] = resume;
-                return;
-            }
-        }
-        storage[size] = resume;
+    protected void doSave(int index, Resume resume) {
+        int realIndex = -index - 1;
+        System.arraycopy(storage, realIndex, storage, realIndex + 1, size - realIndex);
+        storage[realIndex] = resume;
+    }
+
+    @Override
+    protected void shift(int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - index);
     }
 }

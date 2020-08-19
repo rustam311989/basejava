@@ -33,7 +33,7 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = searchIndex(resume.getUuid());
         if (index < 0) {
             if (size < STORAGE_LIMIT) {
-                doSave(resume);
+                doSave(index, resume);
                 size++;
                 System.out.println("Resume " + resume + " saved successfully");
             } else {
@@ -44,7 +44,7 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    protected abstract void doSave(Resume resume);
+    protected abstract void doSave(int index, Resume resume);
 
     @Override
     //шаблонный метод
@@ -62,15 +62,15 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = searchIndex(uuid);
         if (index >= 0) {
-            if (size - index >= 0) {
-                System.arraycopy(storage, index + 1, storage, index, size - index);
-            }
+            shift(index);
             size--;
             System.out.println("Resume " + uuid + " deleted successfully");
         } else {
             System.out.println("Resume " + uuid + " not found");
         }
     }
+
+    protected abstract void shift(int index);
 
     /**
      * @return array, contains only Resumes in storage (without null)
