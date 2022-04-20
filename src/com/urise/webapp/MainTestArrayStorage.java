@@ -11,14 +11,14 @@ public class MainTestArrayStorage {
     static final AbstractArrayStorage STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume();
-        r1.setUuid("uuid1");
-        Resume r2 = new Resume();
-        r2.setUuid("uuid2");
-        Resume r3 = new Resume();
-        r3.setUuid("uuid3");
-        Resume r4 = new Resume();
-        r4.setUuid("uuid3");
+        Resume r1 = new Resume("uuid1");
+        //r1.setUuid();
+        Resume r2 = new Resume("uuid2");
+        //r2.setUuid();
+        Resume r3 = new Resume("uuid3");
+        //r3.setUuid();
+        Resume r4 = new Resume("uuid3");
+        //r4.setUuid();
 
         STORAGE.save(r1);
         STORAGE.save(r2);

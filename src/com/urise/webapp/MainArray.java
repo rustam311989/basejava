@@ -37,8 +37,8 @@ public class MainArray {
                     System.out.println(STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume();
-                    r.setUuid(uuid);
+                    r = new Resume(uuid);
+                    //r.setUuid();
                     STORAGE.save(r);
                     printAll();
                     break;
