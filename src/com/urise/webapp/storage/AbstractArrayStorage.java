@@ -1,13 +1,17 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    private static final int STORAGE_LIMIT = 10_000;
+    protected static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
+
 
     @Override
     public void clear() {
@@ -17,13 +21,14 @@ public abstract class AbstractArrayStorage implements Storage {
 
     @Override
     //шаблонный метод
-    public void update(Resume resume) {
+    public void update(Resume resume) throws NotExistStorageException {
         int index = searchIndex(resume.getUuid());
         if (index >= 0) {
             storage[index] = resume;
             System.out.println("Resume " + resume + " updated successfully");
         } else {
             System.out.println("Resume " + resume + " not found");
+            throw new NotExistStorageException("Resume " + resume + " not found");
         }
     }
 
@@ -31,18 +36,20 @@ public abstract class AbstractArrayStorage implements Storage {
 
     @Override
     //шаблонный метод
-    public void save(Resume resume) {
+    public void save(Resume resume) throws StorageException {
         int index = searchIndex(resume.getUuid());
         if (index < 0) {
             if (size < STORAGE_LIMIT) {
                 insert(index, resume);
                 size++;
-                System.out.println("Resume " + resume + " saved successfully");
+                //System.out.println("Resume " + resume + " saved successfully");
             } else {
                 System.out.println("It is not possible to keep the memory full");
+                throw new StorageException("memory full");
             }
         } else {
             System.out.println("Resume " + resume + " already exists");
+            throw new ExistStorageException("Resume " + resume + " already exists");
         }
     }
 
@@ -50,18 +57,18 @@ public abstract class AbstractArrayStorage implements Storage {
 
     @Override
     //шаблонный метод
-    public Resume get(String uuid) {
+    public Resume get(String uuid) throws NotExistStorageException {
         int index = searchIndex(uuid);
         if (index >= 0) {
             return storage[index];
         }
         System.out.println("Resume " + uuid + " not found");
-        return null;
+        throw new NotExistStorageException("Resume " + uuid + " not found");
     }
 
     @Override
     //шаблонный метод
-    public void delete(String uuid) {
+    public void delete(String uuid) throws NotExistStorageException {
         int index = searchIndex(uuid);
         if (index >= 0) {
             shift(index);
@@ -69,6 +76,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Resume " + uuid + " deleted successfully");
         } else {
             System.out.println("Resume " + uuid + " not found");
+            throw new NotExistStorageException("Resume " + uuid + " not found");
         }
     }
 
