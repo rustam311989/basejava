@@ -4,20 +4,24 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractStorageTest {
     private Storage storage;
+
+    public Storage getStorage() {
+        return storage;
+    }
+
     private final Resume resume1 = new Resume("uuid1");
     private final Resume resume2 = new Resume("uuid2");
     private final Resume resume3 = new Resume("uuid3");
     private final Resume resume4 = new Resume("uuid4");
     private final Resume resume5ForUpdate = new Resume("uuid2");
 
-    public AbstractArrayStorageTest(Storage storage) {
+    protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -79,18 +83,6 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void getNotExist(){
         storage.get("dummy");
-    }
-
-    @Test(expected = StorageException.class)
-    public void memoryFull(){
-        try{
-            for(int i = 4; i <= AbstractArrayStorage.STORAGE_LIMIT; i++){
-                storage.save(new Resume());
-            }
-        }catch (StorageException e){
-            Assert.fail();
-        }
-        storage.save(new Resume());
     }
 
     @Test(expected = NotExistStorageException.class)
