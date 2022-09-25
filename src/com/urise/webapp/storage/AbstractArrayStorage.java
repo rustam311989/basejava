@@ -4,10 +4,12 @@ import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
-    protected static final int STORAGE_LIMIT = 10000;
 
+    protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
@@ -28,9 +30,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    public Resume[] getAll() {
+    /*public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
-    }
+    }*/
 
     @Override
     protected void doSave(Resume r, Object index) {
@@ -49,14 +51,23 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
-    public Resume doGet(Object index) {
-        return storage[(Integer) index];
-    }
-
     @Override
     protected boolean isExist(Object index) {
         return (Integer) index >= 0;
     }
+
+    @Override
+    public List<Resume> getAllSorted() {
+        return Arrays.stream(Arrays.copyOfRange(storage, 0, size))
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
+    public Resume doGet(Object index) {
+        return storage[(Integer) index];
+    }
+
+
 
     protected abstract void fillDeletedElement(int index);
 

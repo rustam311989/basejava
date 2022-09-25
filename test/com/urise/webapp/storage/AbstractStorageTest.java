@@ -15,11 +15,11 @@ public abstract class AbstractStorageTest {
         return storage;
     }
 
-    private final Resume resume1 = new Resume("uuid1");
-    private final Resume resume2 = new Resume("uuid2");
-    private final Resume resume3 = new Resume("uuid3");
-    private final Resume resume4 = new Resume("uuid4");
-    private final Resume resume5ForUpdate = new Resume("uuid2");
+    private final Resume resume1 = new Resume("uuid1", "1one");
+    private final Resume resume2 = new Resume("uuid2","2two");
+    private final Resume resume3 = new Resume("uuid3","3three");
+    private final Resume resume4 = new Resume("uuid4","4four");
+    private final Resume resume5ForUpdate = new Resume("uuid2","2replacedTwo");
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -41,13 +41,13 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() {
         storage.update(resume5ForUpdate);
-        Assertions.assertArrayEquals(new Resume[]{resume1, resume5ForUpdate, resume3},storage.getAll());
+        Assertions.assertEquals(storage.get("uuid2"),resume5ForUpdate);
     }
 
     @Test
     public void save() throws StorageException {
         storage.save(resume4);
-        Assertions.assertArrayEquals(new Resume[]{resume1, resume2, resume3, resume4},storage.getAll());
+        Assertions.assertArrayEquals(new Resume[]{resume1, resume2, resume3, resume4},storage.getAllSorted().toArray());
     }
 
     @Test
@@ -58,16 +58,12 @@ public abstract class AbstractStorageTest {
     @Test
     public void delete() throws NotExistStorageException {
         storage.delete("uuid1");
-        Resume[] getAll = storage.getAll();
-        Assertions.assertTrue(
-                resume2 == getAll[0] && resume3 == getAll[1] ||
-                        resume2 == getAll[1] && resume3 == getAll[0]
-        );
+        Assertions.assertArrayEquals(new Resume[]{resume2, resume3},storage.getAllSorted().toArray());
     }
 
     @Test
-    public void getAll() {
-        Assertions.assertArrayEquals(new Resume[]{resume1, resume2, resume3},storage.getAll());
+    public void getAllSorted() {
+        Assertions.assertArrayEquals(new Resume[]{resume1, resume2, resume3},storage.getAllSorted().toArray());
     }
 
     @Test
